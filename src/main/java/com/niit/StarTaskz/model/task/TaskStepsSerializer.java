@@ -11,6 +11,8 @@ public class TaskStepsSerializer extends JsonSerializer<TaskSteps> {
     public void serialize(TaskSteps steps, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         // Serialize individual fields or the entire object as needed
+        jsonGenerator.writeFieldName("id");
+        jsonGenerator.writeObject(steps.getId());
         jsonGenerator.writeFieldName("step-description");
         jsonGenerator.writeObject(steps.getStepDescription());
         jsonGenerator.writeFieldName("status");

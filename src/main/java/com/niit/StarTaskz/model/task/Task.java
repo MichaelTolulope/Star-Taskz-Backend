@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class Task {
-    @Id
     private String id;
     private String taskName;
     private List<TaskSteps> steps;

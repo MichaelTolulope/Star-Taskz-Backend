@@ -113,14 +113,17 @@ public class UserService {
     }
 
     //update task status
-    public Task updateStatus(String userId, String taskId, String status) {
+    public Task updateStatus(String userId, String taskId, Status status) {
         User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
         List<Task> taskList = user.getUserTasks();
         Task specificTask;
         for (Task task : taskList) {
             if (task.getId().equals(taskId)) {
                 specificTask = task;
-                specificTask.setStatus(Status.valueOf(status));
+                if(status == Status.completed){
+                    specificTask.setEndedAt(LocalDateTime.now());
+                }
+                specificTask.setStatus(status);
                 user.setUserTasks(taskList);
                 userRepo.save(user);
                 return specificTask;
@@ -175,7 +178,7 @@ public class UserService {
     }
 
     // update subtask status
-    public Task updateTaskStepStatus(String userId, String taskId, String stepId, String status) {
+    public Task updateTaskStepStatus(String userId, String taskId, String stepId, Status status) {
         User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
         List<Task> taskList = user.getUserTasks();
         Task specificTask;
@@ -185,7 +188,7 @@ public class UserService {
                 List<TaskSteps> subTasks = specificTask.getSteps();
                 for (TaskSteps step : subTasks)
                     if(step.getId().equals(stepId))
-                        step.setStatus(Status.valueOf(status));
+                        step.setStatus(status);
                 specificTask.setSteps(subTasks);
                 user.setUserTasks(taskList);
                 userRepo.save(user);
