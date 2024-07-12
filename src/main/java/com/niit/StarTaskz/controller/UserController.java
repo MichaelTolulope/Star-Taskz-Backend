@@ -1,14 +1,12 @@
 package com.niit.StarTaskz.controller;
 
 import com.niit.StarTaskz.model.User;
-import com.niit.StarTaskz.model.dto_classes.user.EmailDTO;
-import com.niit.StarTaskz.model.dto_classes.user.UserDateOfBirthDTO;
-import com.niit.StarTaskz.model.dto_classes.user.UserFullnameDTO;
-import com.niit.StarTaskz.model.dto_classes.user.UserPasswordDTO;
+import com.niit.StarTaskz.model.dto_classes.user.*;
 import com.niit.StarTaskz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,13 +18,26 @@ import java.util.List;
 public class UserController {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     UserService userService;
 // Tested & Trusted
     @PostMapping("/register")
     protected ResponseEntity<User> registerUser(@RequestBody User user) {
         user.setUserTasks(new ArrayList<>());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setGroups(new ArrayList<>());
         User userToBeSaved = userService.registerUser(user);
         return new ResponseEntity<>(userToBeSaved, HttpStatus.CREATED);
+    }
+
+    // login endpoint
+    @PostMapping("/login")
+    protected ResponseEntity<User> userLogin(@RequestBody LoginDTO loginDetail){
+        String email = loginDetail.getEmail();;
+        String password = loginDetail.getPassword();
+        return new ResponseEntity<>(userService.loginUser(email,password),HttpStatus.OK);
     }
 
     // Tested & Trusted

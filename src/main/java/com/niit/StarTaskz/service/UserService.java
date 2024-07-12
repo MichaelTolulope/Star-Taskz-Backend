@@ -6,9 +6,11 @@ import com.niit.StarTaskz.model.task.Task;
 import com.niit.StarTaskz.model.task.TaskSteps;
 import com.niit.StarTaskz.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +20,23 @@ public class UserService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public User registerUser(User user) {
         return userRepo.save(user);
+    }
+
+
+    public User loginUser(String email, String password){
+        User user = userRepo.findByEmail(email).orElseThrow(()->new HttpClientErrorException(HttpStatus.NOT_FOUND,"user with email not found!"));
+        String encodedPassword = user.getPassword();
+        if(passwordEncoder.matches(password,encodedPassword)){
+            return user;
+        }
+        else{
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "invalid credentials");
+        }
     }
 
     public List<User> getAllUsers() {

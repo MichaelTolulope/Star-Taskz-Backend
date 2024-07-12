@@ -1,11 +1,9 @@
 package com.niit.StarTaskz.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.niit.StarTaskz.model.task.Task;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -28,6 +26,8 @@ public class User {
     private Date dateOfBirth;
     private String role;
     private List<Task> userTasks;
+    private List<String> groups;
+
 
 
 }
