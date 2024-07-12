@@ -1,12 +1,15 @@
 package com.niit.StarTaskz.service;
 
 import com.niit.StarTaskz.model.User;
+import com.niit.StarTaskz.model.task.Status;
 import com.niit.StarTaskz.model.task.Task;
+import com.niit.StarTaskz.model.task.TaskSteps;
 import com.niit.StarTaskz.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -15,60 +18,77 @@ public class UserService {
     @Autowired
     UserRepo userRepo;
 
-    public User registerUser(User user){
+    public User registerUser(User user) {
         return userRepo.save(user);
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
-    public User getOneUser(String id){
-        if(userRepo.findById(id).isPresent())
+    public User getOneUser(String id) {
+        if (userRepo.findById(id).isPresent())
             return userRepo.findById(id).get();
         return null;
     }
+
     // update email
-    public User updateEmail(String userId, String email){
-       User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));;
+    public User updateEmail(String userId, String email) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        ;
         user.setEmail(email);
         return userRepo.save(user);
     }
+
     // update names
-    public User updateNames(String userId, String firstName, String lastName){
-       User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));;
+    public User updateNames(String userId, String firstName, String lastName) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        ;
         user.setFirstName(firstName);
         user.setLastName(lastName);
         return userRepo.save(user);
     }
 
-    public User updatePassword(String userId, String password){
-        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("User not found!"));
+    public User updatePassword(String userId, String password) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
         user.setPassword(password);
         userRepo.save(user);
         return user;
     }
 
-    public User updateDateOfBirth(String userId, Date dateOfBirth){
-        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("User not found!"));
+    public User updateDateOfBirth(String userId, Date dateOfBirth) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
         user.setDateOfBirth(dateOfBirth);
         return userRepo.save(user);
     }
+
     //--------------------------- TASKS -----------------------------
-    public List<Task> getAllTasks(String userId){
-        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("User not found!"));
+
+    // get all task for user
+    public List<Task> getAllTasks(String userId) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
         return user.getUserTasks();
     }
 
-    // add a task
-    public Task addTask(String userId, Task task){
+    // get one task
+    public Task getSingleTask(String userId, String taskId){
         User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("user not found!"));
+        for(Task task : user.getUserTasks()){
+            if(task.getId().equals(taskId))
+                return task;
+        }
+        return null;
+    }
+
+    // add a task
+    public Task addTask(String userId, Task task) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
         List<Task> userTasks = user.getUserTasks();
         userTasks.add(task);
         user.setUserTasks(userTasks);
         User updatedUser = userRepo.save(user);
-        for(Task task1 : updatedUser.getUserTasks()){
-            if(task1.getTaskName().equals(task.getTaskName())){
+        for (Task task1 : updatedUser.getUserTasks()) {
+            if (task1.getTaskName().equals(task.getTaskName())) {
                 return task;
             }
         }
@@ -76,12 +96,12 @@ public class UserService {
     }
 
     //update taskName
-    public Task updateTaskName(String userId, String taskName){
-        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("user not found!"));
+    public Task updateTaskName(String userId, String taskId, String taskName) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
         List<Task> taskList = user.getUserTasks();
         Task specificTask;
-        for (Task task: taskList){
-            if(task.getTaskName().equals(taskName)){
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
                 specificTask = task;
                 specificTask.setTaskName(taskName);
                 user.setUserTasks(taskList);
@@ -91,4 +111,107 @@ public class UserService {
         }
         return null;
     }
+
+    //update task status
+    public Task updateStatus(String userId, String taskId, String status) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        Task specificTask;
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
+                specificTask = task;
+                specificTask.setStatus(Status.valueOf(status));
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return specificTask;
+            }
+        }
+        return null;
+    }
+
+    // update start time
+    public Task updateStartTime(String userId, String taskId, LocalDateTime dateTime) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        Task specificTask;
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
+                specificTask = task;
+                specificTask.setStartedAt(dateTime);
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return specificTask;
+            }
+        }
+        return null;
+    }
+
+    public List<Task> deleteTask(String userId, String taskId){
+        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        taskList.removeIf(task -> task.getId().equals(taskId));
+        user.setUserTasks(taskList);
+        return userRepo.save(user).getUserTasks();
+    }
+// --------------------- Task Steps
+
+
+    // add subtasks
+    public Task addSubTasks(String userId, String taskId, TaskSteps subTask){
+        User user = userRepo.findById(userId).orElseThrow(()->new RuntimeException("user not Found!"));
+        List<Task> taskList = user.getUserTasks();
+        List<TaskSteps> subTasksList;
+        for (Task task: taskList) {
+            if (task.getId().equals(taskId)) {
+                subTasksList = task.getSteps();
+                subTasksList.add(subTask);
+                task.setSteps(subTasksList);
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return task;
+            }
+        }
+        return null;
+    }
+
+    // update subtask status
+    public Task updateTaskStepStatus(String userId, String taskId, String stepId, String status) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        Task specificTask;
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
+                specificTask = task;
+                List<TaskSteps> subTasks = specificTask.getSteps();
+                for (TaskSteps step : subTasks)
+                    if(step.getId().equals(stepId))
+                        step.setStatus(Status.valueOf(status));
+                specificTask.setSteps(subTasks);
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return specificTask;
+            }
+        }
+        return null;
+    }
+
+    // delete subTask
+    public Task deleteTaskStep(String userId, String taskId, String stepId) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        Task specificTask;
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
+                specificTask = task;
+                List<TaskSteps> subTasks = specificTask.getSteps();
+                subTasks.removeIf(step -> step.getId().equals(stepId));
+                specificTask.setSteps(subTasks);
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return specificTask;
+            }
+        }
+        return null;
+    }
+
 }

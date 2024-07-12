@@ -5,6 +5,7 @@ import lombok.Data;
 @JsonSerialize(using = TaskStepsSerializer.class)
 @Data
 public class TaskSteps {
+    String id;
     String stepDescription;
     Status status;
 }
