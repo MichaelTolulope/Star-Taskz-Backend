@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -29,13 +30,13 @@ public class UserService {
 
 
     public User loginUser(String email, String password){
-        User user = userRepo.findByEmail(email).orElseThrow(()->new HttpClientErrorException(HttpStatus.NOT_FOUND,"user with email not found!"));
+        User user = userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user with email not found!"));
         String encodedPassword = user.getPassword();
         if(passwordEncoder.matches(password,encodedPassword)){
             return user;
         }
         else{
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "invalid credentials");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid credentials");
         }
     }
 
@@ -51,7 +52,7 @@ public class UserService {
 
     // update email
     public User updateEmail(String userId, String email) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found"));
         ;
         user.setEmail(email);
         return userRepo.save(user);
@@ -59,7 +60,7 @@ public class UserService {
 
     // update names
     public User updateNames(String userId, String firstName, String lastName) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!"));
         ;
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -67,14 +68,15 @@ public class UserService {
     }
 
     public User updatePassword(String userId, String password) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                ,"User not found!"));
         user.setPassword(password);
         userRepo.save(user);
         return user;
     }
 
     public User updateDateOfBirth(String userId, Date dateOfBirth) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!"));
         user.setDateOfBirth(dateOfBirth);
         return userRepo.save(user);
     }
