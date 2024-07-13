@@ -26,7 +26,7 @@ public class User {
     private Date dateOfBirth;
     private String role;
     private List<Task> userTasks;
-    private List<String> groups;
+    private List<String> workSpaces;
 
 
 

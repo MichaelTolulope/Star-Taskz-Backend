@@ -1,4 +1,4 @@
-package com.niit.StarTaskz.model.collaboration_groups;
+package com.niit.StarTaskz.model.collaboration_workspace.groups;
 
 import lombok.Data;
 
