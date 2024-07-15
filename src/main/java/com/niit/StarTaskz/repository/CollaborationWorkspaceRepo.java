@@ -5,8 +5,9 @@ import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface CollaborationWorkspaceRepo extends MongoRepository<WorkSpace,String> {
-    public Optional<UserGroup> findByCreator(String creator);
+    public Optional<List<WorkSpace>> findByCreator(String creator);
 }

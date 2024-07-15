@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,7 +18,7 @@ public class WorkSpaceController {
 
     @GetMapping("/all/{userId}")
     protected ResponseEntity<List<WorkSpace>> getAllWorkspace(@PathVariable String userId){
-       return new ResponseEntity<>( workspaceService.getAllWorkSpace(userId), HttpStatus.CREATED);
+       return new ResponseEntity<>( workspaceService.getAllWorkSpace(userId), HttpStatus.FOUND);
     }
 
     @GetMapping("/single-workspace/{workSpaceId}")
@@ -31,9 +28,6 @@ public class WorkSpaceController {
 
     @PostMapping("/create-workSpace/{userId}")
     public ResponseEntity<WorkSpace> createWorkSpace(@PathVariable String userId, @RequestBody WorkSpace workSpace){
-        workSpace.setCreatedAt(LocalDateTime.now());
-        workSpace.setTasks(new ArrayList<>());
-        workSpace.setGroup(null);
         return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.CREATED);
     }
 
@@ -42,8 +36,19 @@ public class WorkSpaceController {
         return new ResponseEntity<>(workspaceService.updateWorkSpaceTitle(workSpaceId,workSpaceId),HttpStatus.OK);
     }
 
+    // delete workspace Tested & Trusted
     @DeleteMapping("/delete/{workSpaceId}")
     public ResponseEntity<String> deleteWorkSpace(@PathVariable String workSpaceId){
         return new ResponseEntity<>(workspaceService.deleteWorkSpace(workSpaceId),HttpStatus.OK);
+    }
+// remove Members Tested & Trusted
+    @PutMapping("/remove-member/{workspaceId}/{userId}")
+    protected ResponseEntity<WorkSpace> removeMember(@PathVariable String workspaceId, @PathVariable String userId){
+        return new ResponseEntity<>(workspaceService.removeMember(workspaceId,userId),HttpStatus.OK);
+    }
+//  add members Tested & Trusted
+    @PutMapping("/add-member/{workspaceId}/{userId}")
+    protected ResponseEntity<WorkSpace> addMember(@PathVariable String workspaceId, @PathVariable String userId){
+        return new ResponseEntity<>(workspaceService.addMember(workspaceId,userId),HttpStatus.OK);
     }
 }

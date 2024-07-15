@@ -1,6 +1,6 @@
-package com.niit.StarTaskz.model;
+package com.niit.StarTaskz.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.niit.StarTaskz.model.task.Task;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @Builder
 @Document("user")
+@JsonSerialize(using = UserSerializer.class)
 public class User {
     @Id
     private String id;

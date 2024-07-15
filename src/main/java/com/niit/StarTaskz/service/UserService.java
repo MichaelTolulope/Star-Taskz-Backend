@@ -1,6 +1,6 @@
 package com.niit.StarTaskz.service;
 
-import com.niit.StarTaskz.model.User;
+import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.task.Status;
 import com.niit.StarTaskz.model.task.Task;
 import com.niit.StarTaskz.model.task.TaskSteps;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +25,10 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public User registerUser(User user) {
+        user.setRole("user");
+        user.setUserTasks(new ArrayList<>());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setWorkSpaces(new ArrayList<>());
         return userRepo.save(user);
     }
 

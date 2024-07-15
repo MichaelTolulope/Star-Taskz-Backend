@@ -14,7 +14,7 @@ public class WorkSpace {
     private String workSpaceTitle;
     private String creator;
     private List<String> teamMembers;
-    private UserGroup group;
+    private List<UserGroup> groups;
     private List<CollaboratingTask> tasks;
     private LocalDateTime createdAt;
 }

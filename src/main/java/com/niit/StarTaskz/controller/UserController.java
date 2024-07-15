@@ -1,6 +1,6 @@
 package com.niit.StarTaskz.controller;
 
-import com.niit.StarTaskz.model.User;
+import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.dto_classes.user.*;
 import com.niit.StarTaskz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,11 +25,7 @@ public class UserController {
 // Tested & Trusted
     @PostMapping("/register")
     protected ResponseEntity<User> registerUser(@RequestBody User user) {
-        user.setUserTasks(new ArrayList<>());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setGroups(new ArrayList<>());
-        User userToBeSaved = userService.registerUser(user);
-        return new ResponseEntity<>(userToBeSaved, HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.registerUser(user), HttpStatus.CREATED);
     }
 
     // login endpoint

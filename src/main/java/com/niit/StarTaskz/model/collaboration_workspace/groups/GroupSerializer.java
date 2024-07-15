@@ -17,10 +17,14 @@ public class GroupSerializer extends JsonSerializer<UserGroup> {
         jsonGenerator.writeObject(group.getWorkSpace());
         jsonGenerator.writeFieldName("groupName");
         jsonGenerator.writeObject(group.getGroupName());
+        jsonGenerator.writeFieldName("groupDescription");
+        jsonGenerator.writeObject(group.getGroupDescription());
         jsonGenerator.writeFieldName("members");
         jsonGenerator.writeObject(group.getMembers());
         jsonGenerator.writeFieldName("messages");
         jsonGenerator.writeObject(group.getMessages());
+        jsonGenerator.writeFieldName("createdAt");
+        jsonGenerator.writeObject(group.getCreatedAt());
 
         jsonGenerator.writeEndObject();
     }

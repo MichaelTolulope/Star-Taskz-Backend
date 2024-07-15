@@ -17,46 +17,46 @@ public class UserGroupController {
 
 
     // endpoint to get single group created by user
-    @GetMapping("/get-group/{workspaceId}")
-    public ResponseEntity<UserGroup> getSingleGroup(@PathVariable String workspaceId){
-        return new ResponseEntity<>(groupService.getGroup(workspaceId),HttpStatus.FOUND);
+    @GetMapping("/get-group/{workspaceId}/{groupId}")
+    public ResponseEntity<UserGroup> getSingleGroup(@PathVariable String workspaceId, @PathVariable String groupId){
+        return new ResponseEntity<>(groupService.getGroup(workspaceId,groupId),HttpStatus.FOUND);
     }
 
     // endpoint to create a group -
-    @PostMapping("/create-group/{workSpaceId}")
-    protected ResponseEntity<UserGroup> createGroup(@PathVariable String workSpaceId, @RequestBody UserGroup group){
+    @PostMapping("/create-group/{workSpaceId}/{creatorId}")
+    protected ResponseEntity<UserGroup> createGroup(@PathVariable String workSpaceId, @RequestBody UserGroup group, @PathVariable String creatorId){
 
-        return new ResponseEntity<>(groupService.createGroup(workSpaceId,group),HttpStatus.CREATED);
+        return new ResponseEntity<>(groupService.createGroup(workSpaceId,group,creatorId),HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/" +
-            "{workSpaceId}{creatorId}/")
-    protected ResponseEntity<String> deleteGroup(@PathVariable String workSpaceId ,@PathVariable String creatorId){
-        return new ResponseEntity<>(groupService.deleteGroup(workSpaceId,creatorId),HttpStatus.OK);
+            "{workSpaceId}/{groupId}/")
+    protected ResponseEntity<String> deleteGroup(@PathVariable String workSpaceId ,@PathVariable String groupId){
+        return new ResponseEntity<>(groupService.deleteGroup(workSpaceId,groupId),HttpStatus.OK);
 
     }
 
-    @PutMapping("/add-member/{workspaceId}/{memberId}")
-    protected ResponseEntity<UserGroup> addMember(@PathVariable String workspaceId, @PathVariable String memberId){
-        return new ResponseEntity<>(groupService.addMembersToGroup(workspaceId, memberId),HttpStatus.OK);
+    @PutMapping("/add-member/{workspaceId}/{groupId}/{memberId}")
+    protected ResponseEntity<UserGroup> addMember(@PathVariable String workspaceId,@PathVariable String groupId, @PathVariable String memberId){
+        return new ResponseEntity<>(groupService.addMembersToGroup(workspaceId,groupId, memberId),HttpStatus.OK);
     }
 
-    @PutMapping("/remove-member/{workspaceId}/{memberId}")
-    protected ResponseEntity<UserGroup> removeMember(@PathVariable String workspaceId, @PathVariable String memberId){
-        return new ResponseEntity<>(groupService.removeMemberFromGroup(workspaceId,memberId),HttpStatus.OK);
+    @PutMapping("/remove-member/{workspaceId}/{groupId}/{memberId}")
+    protected ResponseEntity<UserGroup> removeMember(@PathVariable String workspaceId, @PathVariable String groupId, @PathVariable String memberId){
+        return new ResponseEntity<>(groupService.removeMemberFromGroup(workspaceId,groupId,memberId),HttpStatus.OK);
     }
 
-    @PutMapping("/update-groupName{workspaceId}")
-    protected ResponseEntity<UserGroup> updateGroupName(@PathVariable String workspaceId, GroupNameDTO groupNameDto){
+    @PutMapping("/update-groupName/{workspaceId}/{groupName}")
+    protected ResponseEntity<UserGroup> updateGroupName(@PathVariable String workspaceId,@PathVariable String groupId, GroupNameDTO groupNameDto){
         String groupName = groupNameDto.getGroupName();
-        return new ResponseEntity<>(groupService.updateGroupName(workspaceId,groupName),HttpStatus.OK);
+        return new ResponseEntity<>(groupService.updateGroupName(workspaceId,groupId,groupName),HttpStatus.OK);
     }
 
     // ----------------------------- Messaging------------------------
 
-    @PostMapping("/send-groupMessage/{senderId}/{workspaceId}")
-    protected ResponseEntity<String> sendMessage(@PathVariable String senderId, @PathVariable String workspaceId, @RequestBody Message message){
-        return new ResponseEntity<>(groupService.sendMessage(workspaceId,senderId,message),HttpStatus.OK);
+    @PostMapping("/send-groupMessage/{workspaceId}/{groupId}/{senderId}/")
+    protected ResponseEntity<String> sendMessage(@PathVariable String senderId,@PathVariable String groupId, @PathVariable String workspaceId, @RequestBody Message message){
+        return new ResponseEntity<>(groupService.sendMessage(workspaceId,groupId,senderId,message),HttpStatus.OK);
     }
 
 }
