@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +41,9 @@ public class UserController {
     // Tested & Trusted
     @GetMapping("/get-all")
     protected ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        List<User> users = userService.getAllUsers();
+        System.out.println("Number of users returned: " + users.size());  // Add logging here
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 // Tested & Trusted
@@ -47,7 +51,22 @@ public class UserController {
     protected ResponseEntity<User> getSingleUser(@PathVariable String id) {
         return new ResponseEntity<>(userService.getOneUser(id), HttpStatus.FOUND);
     }
+// get user by email
+    @GetMapping("/get-by-mail/{email}")
+    protected ResponseEntity<User> getSingleUserByEmail(@PathVariable String email) {
+        return new ResponseEntity<>(userService.getOneUserByEmail(email), HttpStatus.FOUND);
+    }
 
+    @PostMapping("/upload-profileImage/{userId}")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
+                                              @PathVariable String userId) {
+        try {
+            String imageUrl = userService.uploadProfilePic(userId,file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Image upload failed");
+        }
+    }
 // update email endpoint -  Tested & Trusted
     @PutMapping("/update-email/{userId}")
     protected ResponseEntity<User> updateEmail(@PathVariable String userId, @RequestBody EmailDTO emailEntity) {
@@ -76,6 +95,12 @@ public class UserController {
     protected ResponseEntity<User> updateDateOfBirth(@PathVariable String userId, @RequestBody UserDateOfBirthDTO dateOfBirthEntity) {
         Date dateOfBirth = dateOfBirthEntity.getDateOfBirth();
         return new ResponseEntity<>(userService.updateDateOfBirth(userId, dateOfBirth),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-user/{userId}")
+    protected ResponseEntity<String> deleteUser(@PathVariable String userId){
+        userService.deleteUser(userId);
+        return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
     }
 
 }

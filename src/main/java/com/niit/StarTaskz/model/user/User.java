@@ -17,9 +17,12 @@ import java.util.List;
 public class User {
     @Id
     private String id;
+    private String profileImageUrl;
     private String email;
     private String firstName;
     private String lastName;
+    private AccountType accountType;
+    private String jobTitle;
 
 //    @JsonIgnore
     private String password;
