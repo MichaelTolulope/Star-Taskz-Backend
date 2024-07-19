@@ -1,5 +1,7 @@
 package com.niit.StarTaskz.service;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
 import com.niit.StarTaskz.repository.CollaborationWorkspaceRepo;
@@ -7,11 +9,14 @@ import com.niit.StarTaskz.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CollaborationWorkspaceService {
@@ -22,18 +27,31 @@ public class CollaborationWorkspaceService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
+
+
+
+    public WorkSpace uploadWorkspacePic(String workSpaceId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = getSingleWorkSpace(workSpaceId);
+        Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        workSpace.setWorkSpaceImage(uploadResult.get("url").toString());
+        workspaceRepo.save(workSpace);
+        return workSpace;
+    }
 
     // creating a work-space
     public WorkSpace createWorkspace(WorkSpace workSpace, String creatorId){
         User user = userRepo.findById(creatorId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
-         user.getWorkSpaces().add(workSpace.getId());
-         userRepo.save(user);
          workSpace.setCreator(user.getId());
          workSpace.setTeamMembers(new ArrayList<>(List.of(user.getId())));
         workSpace.setCreatedAt(LocalDateTime.now());
         workSpace.setTasks(new ArrayList<>());
         workSpace.setGroups(new ArrayList<>());
-        return workspaceRepo.save(workSpace);
+        WorkSpace workSpaceCreated = workspaceRepo.save(workSpace);
+        user.getWorkSpaces().add(workSpaceCreated.getId());
+        userRepo.save(user);
+        return workSpaceCreated;
     }
 
 
@@ -50,7 +68,7 @@ public class CollaborationWorkspaceService {
     public String deleteWorkSpace( String workSpace){
         WorkSpace workSpaceToDel = workspaceRepo.findById(workSpace).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
         workspaceRepo.deleteById(workSpaceToDel.getId());
-        User user = userRepo.findById(workSpaceToDel.getId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
+        User user = userRepo.findById(workSpaceToDel.getCreator()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
         user.getWorkSpaces().remove(workSpaceToDel.getId());
         userRepo.save(user);
         return "work deleted!";

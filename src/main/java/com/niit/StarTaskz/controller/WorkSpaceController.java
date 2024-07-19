@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,6 +32,17 @@ public class WorkSpaceController {
     @PostMapping("/create-workSpace/{userId}")
     public ResponseEntity<WorkSpace> createWorkSpace(@PathVariable String userId, @RequestBody WorkSpace workSpace){
         return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.CREATED);
+    }
+
+    @PostMapping("/upload-workspaceImage/{workspaceId}")
+    public ResponseEntity<WorkSpace> uploadImage(@RequestParam("file") MultipartFile file,
+                                              @PathVariable String workspaceId) {
+        try {
+            WorkSpace workSpace = workspaceService.uploadWorkspacePic(workspaceId,file);
+            return ResponseEntity.ok(workSpace);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PutMapping("/update-Title/{workSpaceId}")

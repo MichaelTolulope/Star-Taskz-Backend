@@ -13,6 +13,7 @@ public class UserGroup {
     private String workSpace;
     private String groupName;
     private String groupDescription;
+    private String groupImage;
     private LocalDateTime createdAt;
     private List<String> members;
     private List<Message> messages;
