@@ -55,7 +55,7 @@ public class GroupService {
         if(userWorkspace.getCreator().equals(creatorId)) {
             group.setId(UUID.randomUUID().toString());
             group.setWorkSpace(workSpaceId);
-            group.setMembers(new ArrayList<>(List.of(userWorkspace.getId())));
+            group.setMembers(new ArrayList<>(List.of(userWorkspace.getCreator())));
             group.setMessages(new ArrayList<Message>());
             group.setCreatedAt(LocalDateTime.now());
             userWorkspace.getGroups().add(group);
