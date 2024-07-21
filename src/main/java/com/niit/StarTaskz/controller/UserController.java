@@ -1,5 +1,6 @@
 package com.niit.StarTaskz.controller;
 
+import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.JobTitleDTO;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.dto_classes.user.*;
 import com.niit.StarTaskz.service.UserService;
@@ -71,6 +72,13 @@ public class UserController {
     protected ResponseEntity<User> updatePassword(@PathVariable String userId, @RequestBody UserPasswordDTO passwordEntity) {
         String password = passwordEntity.getPassword();
         return new ResponseEntity<>(userService.updatePassword(userId, password),HttpStatus.OK);
+    }
+
+    // Endpoint to update jobTitle - Tested & Trusted
+    @PutMapping("/update-jobTitle/{userId}")
+    protected ResponseEntity<User> updateJobTitle(@PathVariable String userId, @RequestBody JobTitleDTO jobTitleDTO) {
+        String jobTitle = jobTitleDTO.getJobTitle();
+        return new ResponseEntity<>(userService.updateJobTitle(userId, jobTitle),HttpStatus.OK);
     }
 
     // Endpoint to update date of birth - Tested & Trusted

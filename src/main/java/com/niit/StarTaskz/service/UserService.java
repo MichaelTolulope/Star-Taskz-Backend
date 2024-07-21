@@ -102,6 +102,14 @@ public class UserService {
         return user;
     }
 
+    public User updateJobTitle(String userId, String jobTitle) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                ,"User not found!"));
+        user.setJobTitle(jobTitle);
+        userRepo.save(user);
+        return user;
+    }
+
     public User updateDateOfBirth(String userId, Date dateOfBirth) {
         User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!"));
         user.setDateOfBirth(dateOfBirth);
@@ -166,9 +174,6 @@ public class UserService {
         for (Task task : taskList) {
             if (task.getId().equals(taskId)) {
                 specificTask = task;
-                if(status == Status.completed){
-                    specificTask.setEndedAt(LocalDateTime.now());
-                }
                 specificTask.setStatus(status);
                 user.setUserTasks(taskList);
                 userRepo.save(user);

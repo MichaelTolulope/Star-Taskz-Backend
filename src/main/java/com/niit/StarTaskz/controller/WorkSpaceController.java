@@ -56,7 +56,7 @@ public class WorkSpaceController {
     }
 
     //UPLOAD WORKSPACE IMAGE
-    @PostMapping("/upload-profileImage/{workspaceId}")
+    @PostMapping("/upload-workspaceImage/{workspaceId}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
                                               @PathVariable String workspaceId) {
         try {

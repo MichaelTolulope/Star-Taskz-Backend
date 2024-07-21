@@ -34,7 +34,7 @@ public class GroupService {
 
 
 
-    public String uploadWorkspaceImage(String workspaceId,String groupId, MultipartFile file) throws IOException {
+    public String uploadGroupImage(String workspaceId,String groupId, MultipartFile file) throws IOException {
         WorkSpace workSpace = workspaceService.getSingleWorkSpace(workspaceId);
         List<UserGroup> groups = workSpace.getGroups();
         for(UserGroup group : groups) {
@@ -42,7 +42,7 @@ public class GroupService {
                 Map uploadResult = cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                 group.setGroupImageUrl(uploadResult.get("url").toString());
                 workspaceRepo.save(workSpace);
-                return workSpace.getWorkspaceImageUrl();
+                return group.getGroupImageUrl();
             }
 
         }
@@ -99,10 +99,31 @@ public class GroupService {
 
     public UserGroup updateGroupName(String workspaceId,String groupId,String groupName){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
-        UserGroup group = getGroup(workspaceId,groupId);
-        group.setGroupName(groupName);
-        workspaceRepo.save(workSpace);
-        return group;
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups){
+            if (group.getId().equals(groupId)) {
+                group.setGroupName(groupName);
+                workspaceRepo.save(workSpace);
+                return group;
+
+            }
+        }
+        return null;
+
+    }
+    public UserGroup updateGroupDescription(String workspaceId,String groupId,String groupDescription){
+        WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups){
+            if (group.getId().equals(groupId)) {
+                group.setGroupDescription(groupDescription);
+                workspaceRepo.save(workSpace);
+                return group;
+
+            }
+        }
+        return null;
+
     }
 
     public UserGroup addMembersToGroup(String workspaceId,String groupId,String memberId){

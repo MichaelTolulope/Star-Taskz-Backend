@@ -2,12 +2,16 @@ package com.niit.StarTaskz.controller;
 
 import com.niit.StarTaskz.model.collaboration_workspace.groups.Message;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.UserGroup;
+import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.GroupDescriptionDTO;
 import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.GroupNameDTO;
 import com.niit.StarTaskz.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RequestMapping("star-taskz/api/group")
 @RestController
@@ -46,10 +50,26 @@ public class UserGroupController {
         return new ResponseEntity<>(groupService.removeMemberFromGroup(workspaceId,groupId,memberId),HttpStatus.OK);
     }
 
-    @PutMapping("/update-groupName/{workspaceId}/{groupName}")
-    protected ResponseEntity<UserGroup> updateGroupName(@PathVariable String workspaceId,@PathVariable String groupId, GroupNameDTO groupNameDto){
+    @PutMapping("/update-groupName/{workspaceId}/{groupId}")
+    protected ResponseEntity<UserGroup> updateGroupName(@PathVariable String workspaceId,@PathVariable String groupId, @RequestBody GroupNameDTO groupNameDto){
         String groupName = groupNameDto.getGroupName();
         return new ResponseEntity<>(groupService.updateGroupName(workspaceId,groupId,groupName),HttpStatus.OK);
+    }
+    @PutMapping("/update-groupDescription/{workspaceId}/{groupId}")
+    protected ResponseEntity<UserGroup> updateGroupDescription(@PathVariable String workspaceId, @PathVariable String groupId, @RequestBody GroupDescriptionDTO groupDescriptionDTO){
+        String groupDescription = groupDescriptionDTO.getGroupDescription();
+        return new ResponseEntity<>(groupService.updateGroupDescription(workspaceId,groupId,groupDescription),HttpStatus.OK);
+    }
+
+    @PostMapping("/upload-groupImage/{workspaceId}/{groupId}")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
+                                              @PathVariable String workspaceId, @PathVariable String groupId) {
+        try {
+            String imageUrl = groupService.uploadGroupImage(workspaceId,groupId,file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Image upload failed");
+        }
     }
 
     // ----------------------------- Messaging------------------------
