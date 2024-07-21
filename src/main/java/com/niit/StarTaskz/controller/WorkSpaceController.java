@@ -1,6 +1,8 @@
 package com.niit.StarTaskz.controller;
 
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
+import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.WorkspaceDescription;
+import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.WorkspaceTitle;
 import com.niit.StarTaskz.service.CollaborationWorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +37,14 @@ public class WorkSpaceController {
     }
 
     @PutMapping("/update-Title/{workSpaceId}")
-    public ResponseEntity<WorkSpace> updateWorkspaceTitle(@PathVariable String workSpaceId){
-        return new ResponseEntity<>(workspaceService.updateWorkSpaceTitle(workSpaceId,workSpaceId),HttpStatus.OK);
+    public ResponseEntity<WorkSpace> updateWorkspaceTitle(@PathVariable String workSpaceId, @RequestBody WorkspaceTitle workspaceTitleDTO){
+        String workspaceTitle = workspaceTitleDTO.getWorkspaceTitle();
+        return new ResponseEntity<>(workspaceService.updateWorkSpaceTitle(workspaceTitle,workSpaceId),HttpStatus.OK);
+    }
+    @PutMapping("/update-description/{workSpaceId}")
+    public ResponseEntity<WorkSpace> updateWorkspaceDescription(@PathVariable String workSpaceId, @RequestBody WorkspaceDescription workspaceDescriptionDTO){
+        String workspaceDesc = workspaceDescriptionDTO.getWorkspaceDescription();
+        return new ResponseEntity<>(workspaceService.updateWorkSpaceDescription(workspaceDesc,workSpaceId),HttpStatus.OK);
     }
 
     // delete workspace Tested & Trusted

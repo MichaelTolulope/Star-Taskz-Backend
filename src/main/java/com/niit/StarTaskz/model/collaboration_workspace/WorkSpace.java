@@ -13,6 +13,7 @@ public class WorkSpace {
     private String id;
     private String workSpaceTitle;
     private String workspaceImageUrl;
+    private String workSpaceDescription;
     private String creator;
     private List<String> teamMembers;
     private List<UserGroup> groups;

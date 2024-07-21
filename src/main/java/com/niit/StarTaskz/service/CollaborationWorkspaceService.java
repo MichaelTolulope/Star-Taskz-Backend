@@ -81,6 +81,12 @@ public class CollaborationWorkspaceService {
        return workspaceRepo.save(workSpace);
 
     }
+    public WorkSpace updateWorkSpaceDescription(String workSpaceDescription, String workSpaceId){
+       WorkSpace workSpace = workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
+       workSpace.setWorkSpaceDescription(workSpaceDescription);
+       return workspaceRepo.save(workSpace);
+
+    }
 
     public WorkSpace removeMember(String workspaceId, String memberId){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
