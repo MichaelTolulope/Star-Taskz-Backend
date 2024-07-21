@@ -1,5 +1,7 @@
 package com.niit.StarTaskz.service;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
 import com.niit.StarTaskz.repository.CollaborationWorkspaceRepo;
@@ -7,11 +9,14 @@ import com.niit.StarTaskz.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CollaborationWorkspaceService {
@@ -21,6 +26,20 @@ public class CollaborationWorkspaceService {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
+
+
+
+
+    public String uploadWorkspaceImage(String workspaceId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = getSingleWorkSpace(workspaceId);
+        Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        workSpace.setWorkspaceImageUrl(uploadResult.get("url").toString());
+        workspaceRepo.save(workSpace);
+        return workSpace.getWorkspaceImageUrl();
+    }
 
 
     // creating a work-space

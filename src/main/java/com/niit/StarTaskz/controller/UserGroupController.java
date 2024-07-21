@@ -54,7 +54,7 @@ public class UserGroupController {
 
     // ----------------------------- Messaging------------------------
 
-    @PostMapping("/send-groupMessage/{workspaceId}/{groupId}/{senderId}/")
+    @PostMapping("/send-groupMessage/{workspaceId}/{groupId}/{senderId}")
     protected ResponseEntity<String> sendMessage(@PathVariable String senderId,@PathVariable String groupId, @PathVariable String workspaceId, @RequestBody Message message){
         return new ResponseEntity<>(groupService.sendMessage(workspaceId,groupId,senderId,message),HttpStatus.OK);
     }

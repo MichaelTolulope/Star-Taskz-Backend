@@ -1,5 +1,7 @@
 package com.niit.StarTaskz.service;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.Message;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.UserGroup;
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
@@ -8,16 +10,44 @@ import com.niit.StarTaskz.repository.CollaborationWorkspaceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 @Service
 public class GroupService {
     @Autowired
     CollaborationWorkspaceRepo workspaceRepo;
+
+
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
+
+    @Autowired
+    CollaborationWorkspaceService workspaceService;
+
+
+
+
+    public String uploadWorkspaceImage(String workspaceId,String groupId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = workspaceService.getSingleWorkSpace(workspaceId);
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups) {
+            if (group.getId().equals(groupId)) {
+                Map uploadResult = cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                group.setGroupImageUrl(uploadResult.get("url").toString());
+                workspaceRepo.save(workSpace);
+                return workSpace.getWorkspaceImageUrl();
+            }
+
+        }
+            return null;
+    }
 
     //  group creation
     public UserGroup createGroup(String workSpaceId,UserGroup group,String creatorId){
@@ -94,15 +124,21 @@ public class GroupService {
 
     public String sendMessage(String workspaceId,String groupId,String senderId, Message message){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
-        UserGroup group = getGroup(workspaceId,groupId);
-        List<Message> groupMessages = group.getMessages();
-        message.setId(UUID.randomUUID().toString());
-        message.setSenderId(senderId);
-        message.setReadBy(new ArrayList<>(List.of(senderId)));
-        message.setMessageDateTime(LocalDateTime.now());
-        groupMessages.add(message);
-        group.setMessages(groupMessages);
-        workspaceRepo.save(workSpace);
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups){
+            if(group.getId().equals(groupId)){
+                List<Message> groupMessages = group.getMessages();
+                message.setId(UUID.randomUUID().toString());
+                message.setSenderId(senderId);
+                message.setReadBy(new ArrayList<>(List.of(senderId)));
+                message.setMessageDateTime(LocalDateTime.now());
+                groupMessages.add(message);
+                group.setMessages(groupMessages);
+                workspaceRepo.save(workSpace);
+            }
+
+        }
+
         return "message sent";
     }
 }

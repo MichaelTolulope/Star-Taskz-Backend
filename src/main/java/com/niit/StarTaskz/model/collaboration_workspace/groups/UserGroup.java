@@ -12,6 +12,7 @@ public class UserGroup {
     private String id;
     private String workSpace;
     private String groupName;
+    private String groupImageUrl;
     private String groupDescription;
     private LocalDateTime createdAt;
     private List<String> members;

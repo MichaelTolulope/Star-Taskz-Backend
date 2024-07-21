@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -77,5 +79,23 @@ public class UserController {
         Date dateOfBirth = dateOfBirthEntity.getDateOfBirth();
         return new ResponseEntity<>(userService.updateDateOfBirth(userId, dateOfBirth),HttpStatus.OK);
     }
+
+    // get user by email
+    @GetMapping("/get-by-mail/{email}")
+    protected ResponseEntity<User> getSingleUserByEmail(@PathVariable String email) {
+        return new ResponseEntity<>(userService.getOneUserByEmail(email), HttpStatus.FOUND);
+    }
+
+    @PostMapping("/upload-profileImage/{userId}")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
+                                              @PathVariable String userId) {
+        try {
+            String imageUrl = userService.uploadProfilePic(userId,file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Image upload failed");
+        }
+    }
+
 
 }

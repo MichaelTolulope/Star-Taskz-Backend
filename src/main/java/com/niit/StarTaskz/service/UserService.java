@@ -1,5 +1,7 @@
 package com.niit.StarTaskz.service;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.task.Status;
 import com.niit.StarTaskz.model.task.Task;
@@ -9,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -23,6 +28,20 @@ public class UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    CloudinaryConfig cloudinaryConfig;
+
+
+
+
+    public String uploadProfilePic(String userId, MultipartFile file) throws IOException {
+        User user = getOneUser(userId);
+        Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        user.setProfileImageUrl(uploadResult.get("url").toString());
+        userRepo.save(user);
+        return user.getProfileImageUrl();
+    }
 
     public User registerUser(User user) {
         user.setRole("user");
@@ -52,6 +71,10 @@ public class UserService {
         if (userRepo.findById(id).isPresent())
             return userRepo.findById(id).get();
         return null;
+    }
+
+    public User getOneUserByEmail(String email){
+        return userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
     }
 
     // update email

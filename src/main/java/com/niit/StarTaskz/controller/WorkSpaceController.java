@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,5 +53,17 @@ public class WorkSpaceController {
     @PutMapping("/add-member/{workspaceId}/{userId}")
     protected ResponseEntity<WorkSpace> addMember(@PathVariable String workspaceId, @PathVariable String userId){
         return new ResponseEntity<>(workspaceService.addMember(workspaceId,userId),HttpStatus.OK);
+    }
+
+    //UPLOAD WORKSPACE IMAGE
+    @PostMapping("/upload-profileImage/{workspaceId}")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
+                                              @PathVariable String workspaceId) {
+        try {
+            String imageUrl = workspaceService.uploadWorkspaceImage(workspaceId,file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Image upload failed");
+        }
     }
 }
