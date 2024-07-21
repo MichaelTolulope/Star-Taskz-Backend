@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    private AccountType accountType;
+    private String accountType;
     private String jobTitle;
 
 //    @JsonIgnore
