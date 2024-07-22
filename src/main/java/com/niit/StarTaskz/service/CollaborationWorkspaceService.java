@@ -30,6 +30,9 @@ public class CollaborationWorkspaceService {
     @Autowired
     CloudinaryConfig cloudinaryConfig;
 
+    @Autowired
+    UserService userService;
+
 
 
 
@@ -94,11 +97,15 @@ public class CollaborationWorkspaceService {
     public WorkSpace removeMember(String workspaceId, String memberId){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
         workSpace.getTeamMembers().remove(memberId);
+        User member = userService.getOneUser(memberId);
+        member.getInvitedWorkSpaces().remove(workspaceId);
         return workspaceRepo.save(workSpace);
     }
     public WorkSpace addMember(String workspaceId, String memberId){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
         workSpace.getTeamMembers().add(memberId);
+        User member = userService.getOneUser(memberId);
+        member.getInvitedWorkSpaces().add(workspaceId);
         return workspaceRepo.save(workSpace);
 
     }
