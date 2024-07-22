@@ -17,7 +17,8 @@ public class UserSerializer extends JsonSerializer<User> {
             jsonGenerator.writeStringField("email", user.getEmail());
             jsonGenerator.writeStringField("accountType", String.valueOf(user.getAccountType()));
             jsonGenerator.writeObjectField("jobTitle", user.getJobTitle());
-            jsonGenerator.writeObjectField("workSpaces", user.getWorkSpaces());
+            jsonGenerator.writeObjectField("myWorkSpaces", user.getWorkSpaces());
+            jsonGenerator.writeObjectField("invitedWorkSpaces", user.getWorkSpaces());
             jsonGenerator.writeObjectField("dateOfBirth", user.getDateOfBirth());
             jsonGenerator.writeObjectField("userTasks", user.getUserTasks());
             jsonGenerator.writeEndObject();

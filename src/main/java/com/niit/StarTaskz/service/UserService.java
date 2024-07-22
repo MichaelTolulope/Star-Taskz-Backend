@@ -48,6 +48,7 @@ public class UserService {
         user.setUserTasks(new ArrayList<>());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setWorkSpaces(new ArrayList<>());
+        user.setInvitedWorkSpaces(new ArrayList<>());
         return userRepo.save(user);
     }
 

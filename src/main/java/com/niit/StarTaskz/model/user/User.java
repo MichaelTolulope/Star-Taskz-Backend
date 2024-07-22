@@ -31,6 +31,7 @@ public class User {
     private String role;
     private List<Task> userTasks;
     private List<String> workSpaces;
+    private List<String> invitedWorkSpaces;
 
 
 
