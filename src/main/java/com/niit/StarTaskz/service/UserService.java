@@ -76,9 +76,7 @@ public class UserService {
             return userRepo.findById(id).get();
         return null;
     }
-    public User getOneUserByEmail(String email){
-        return userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
-    }
+
 
     public User getOneUserByEmail(String email){
         return userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));

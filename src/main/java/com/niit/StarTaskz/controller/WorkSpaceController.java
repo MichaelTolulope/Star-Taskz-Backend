@@ -36,16 +36,7 @@ public class WorkSpaceController {
         return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.CREATED);
     }
 
-    @PostMapping("/upload-workspaceImage/{workspaceId}")
-    public ResponseEntity<WorkSpace> uploadImage(@RequestParam("file") MultipartFile file,
-                                              @PathVariable String workspaceId) {
-        try {
-            WorkSpace workSpace = workspaceService.uploadWorkspacePic(workspaceId,file);
-            return ResponseEntity.ok(workSpace);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
-    }
+
 
     @PutMapping("/update-Title/{workSpaceId}")
     public ResponseEntity<WorkSpace> updateWorkspaceTitle(@PathVariable String workSpaceId, @RequestBody WorkspaceTitle workspaceTitleDTO){

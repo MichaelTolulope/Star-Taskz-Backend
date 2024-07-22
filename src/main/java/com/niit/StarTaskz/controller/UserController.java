@@ -107,22 +107,6 @@ public class UserController {
 
 
     // get user by email
-    @GetMapping("/get-by-mail/{email}")
-    protected ResponseEntity<User> getSingleUserByEmail(@PathVariable String email) {
-        return new ResponseEntity<>(userService.getOneUserByEmail(email), HttpStatus.FOUND);
-    }
-
-    @PostMapping("/upload-profileImage/{userId}")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
-                                              @PathVariable String userId) {
-        try {
-            String imageUrl = userService.uploadProfilePic(userId,file);
-            return ResponseEntity.ok(imageUrl);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Image upload failed");
-        }
-    }
-
 
 
 }
