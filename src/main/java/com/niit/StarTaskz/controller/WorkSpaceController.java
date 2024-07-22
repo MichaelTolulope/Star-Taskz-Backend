@@ -36,6 +36,8 @@ public class WorkSpaceController {
         return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.CREATED);
     }
 
+
+
     @PutMapping("/update-Title/{workSpaceId}")
     public ResponseEntity<WorkSpace> updateWorkspaceTitle(@PathVariable String workSpaceId, @RequestBody WorkspaceTitle workspaceTitleDTO){
         String workspaceTitle = workspaceTitleDTO.getWorkspaceTitle();

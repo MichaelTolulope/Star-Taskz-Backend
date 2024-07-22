@@ -5,25 +5,23 @@ import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.Message;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.UserGroup;
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
-import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.repository.CollaborationWorkspaceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 @Service
 public class GroupService {
     @Autowired
     CollaborationWorkspaceRepo workspaceRepo;
-
 
     @Autowired
     CloudinaryConfig cloudinaryConfig;
@@ -33,7 +31,6 @@ public class GroupService {
 
     @Autowired
     UserService userService;
-
 
 
 
@@ -51,6 +48,7 @@ public class GroupService {
         }
             return null;
     }
+
 
     //  group creation
     public UserGroup createGroup(String workSpaceId,UserGroup group,String creatorId){
@@ -71,8 +69,6 @@ public class GroupService {
             }
         }
         return null;
-
-
     }
 
     // delete group
@@ -90,7 +86,7 @@ public class GroupService {
 
     // get group
     public UserGroup getGroup(String workspaceId, String groupId){
-        WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
+        WorkSpace workSpace = workspaceService.getSingleWorkSpace(workspaceId);
         List<UserGroup> groups = workSpace.getGroups();
         for (UserGroup group : groups){
             if(group.getId().equals(groupId)){
@@ -137,6 +133,22 @@ public class GroupService {
         return group;
     }
 
+    public WorkSpace uploadGroupPic(String workSpaceId,String groupId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = workspaceService.getSingleWorkSpace(workSpaceId);
+        List<UserGroup> groupList = workSpace.getGroups();
+        Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        for(UserGroup group : groupList){
+            if(group.getId().equals(groupId)){
+                group.setGroupImage(uploadResult.get("url").toString());
+                return workspaceRepo.save(workSpace);
+
+            }
+        }
+
+
+        return null;
+    }
+
     public UserGroup removeMemberFromGroup(String workspaceId,String groupId, String member){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
         UserGroup group = getGroup(workspaceId,groupId);
@@ -161,10 +173,12 @@ public class GroupService {
                 message.setMessageDateTime(LocalDateTime.now());
                 groupMessages.add(message);
                 group.setMessages(groupMessages);
+
                 workspaceRepo.save(workSpace);
             }
 
         }
+
 
         return "message sent";
     }

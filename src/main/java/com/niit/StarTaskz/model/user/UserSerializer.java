@@ -27,5 +27,6 @@ public class UserSerializer extends JsonSerializer<User> {
             e.printStackTrace();
             throw e;
         }
+
     }
 }

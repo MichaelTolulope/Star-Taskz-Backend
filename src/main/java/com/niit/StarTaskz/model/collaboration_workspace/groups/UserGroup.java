@@ -14,6 +14,7 @@ public class UserGroup {
     private String groupName;
     private String groupImageUrl;
     private String groupDescription;
+    private String groupImage;
     private LocalDateTime createdAt;
     private List<String> members;
     private List<Message> messages;

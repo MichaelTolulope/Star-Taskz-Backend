@@ -35,8 +35,10 @@ public class UserService {
 
 
 
+
     public String uploadProfilePic(String userId, MultipartFile file) throws IOException {
         User user = getOneUser(userId);
+
         Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
         user.setProfileImageUrl(uploadResult.get("url").toString());
         userRepo.save(user);
@@ -65,7 +67,9 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        List<User> users = userRepo.findAll();
+        System.out.println("Retrieved users: " + users.size());  // Add logging here
+        return users;
     }
 
     public User getOneUser(String id) {
@@ -73,6 +77,7 @@ public class UserService {
             return userRepo.findById(id).get();
         return null;
     }
+
 
     public User getOneUserByEmail(String email){
         return userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
@@ -269,4 +274,10 @@ public class UserService {
         return null;
     }
 
+    public void deleteUser(String userId) {
+        if(userRepo.findById(userId).isPresent())
+           userRepo.deleteById(userId);
+        else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found");
+    }
 }
