@@ -11,6 +11,8 @@ import java.util.List;
 public class Message {
     private String id;
     private String senderId;
+    private String senderImage;
+    private String senderName;
     private LocalDateTime messageDateTime;
     private String messageContent;
     private List<String> readBy;

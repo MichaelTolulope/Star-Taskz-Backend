@@ -31,6 +31,9 @@ public class GroupService {
     @Autowired
     CollaborationWorkspaceService workspaceService;
 
+    @Autowired
+    UserService userService;
+
 
 
 
@@ -146,11 +149,14 @@ public class GroupService {
     public String sendMessage(String workspaceId,String groupId,String senderId, Message message){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
         List<UserGroup> groups = workSpace.getGroups();
+        User sender = userService.getOneUser(senderId);
         for(UserGroup group : groups){
             if(group.getId().equals(groupId)){
                 List<Message> groupMessages = group.getMessages();
                 message.setId(UUID.randomUUID().toString());
                 message.setSenderId(senderId);
+                message.setSenderImage(sender.getProfileImageUrl());
+                message.setSenderName(sender.getFirstName());
                 message.setReadBy(new ArrayList<>(List.of(senderId)));
                 message.setMessageDateTime(LocalDateTime.now());
                 groupMessages.add(message);
