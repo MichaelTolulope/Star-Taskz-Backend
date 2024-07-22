@@ -5,6 +5,7 @@ import com.niit.StarTaskz.configurations.CloudinaryConfig;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.Message;
 import com.niit.StarTaskz.model.collaboration_workspace.groups.UserGroup;
 import com.niit.StarTaskz.model.collaboration_workspace.WorkSpace;
+import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.repository.CollaborationWorkspaceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
