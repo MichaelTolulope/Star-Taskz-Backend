@@ -32,13 +32,17 @@ public class CollaborationWorkspaceService {
 
 
 
-    public WorkSpace uploadWorkspacePic(String workSpaceId, MultipartFile file) throws IOException {
-        WorkSpace workSpace = getSingleWorkSpace(workSpaceId);
+
+
+    public String uploadWorkspaceImage(String workspaceId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = getSingleWorkSpace(workspaceId);
         Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-        workSpace.setWorkSpaceImage(uploadResult.get("url").toString());
+        workSpace.setWorkspaceImageUrl(uploadResult.get("url").toString());
         workspaceRepo.save(workSpace);
-        return workSpace;
+        return workSpace.getWorkspaceImageUrl();
     }
+
+
 
     // creating a work-space
     public WorkSpace createWorkspace(WorkSpace workSpace, String creatorId){
@@ -77,6 +81,12 @@ public class CollaborationWorkspaceService {
     public WorkSpace updateWorkSpaceTitle(String workSpaceTitle, String workSpaceId){
        WorkSpace workSpace = workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
        workSpace.setWorkSpaceTitle(workSpaceTitle);
+       return workspaceRepo.save(workSpace);
+
+    }
+    public WorkSpace updateWorkSpaceDescription(String workSpaceDescription, String workSpaceId){
+       WorkSpace workSpace = workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"work space not found!"));
+       workSpace.setWorkSpaceDescription(workSpaceDescription);
        return workspaceRepo.save(workSpace);
 
     }

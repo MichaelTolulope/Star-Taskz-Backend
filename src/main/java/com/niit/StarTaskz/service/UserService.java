@@ -35,8 +35,10 @@ public class UserService {
 
 
 
-    public String uploadProfilePic(String userId,MultipartFile file) throws IOException {
-       User user = getOneUser(userId);
+
+    public String uploadProfilePic(String userId, MultipartFile file) throws IOException {
+        User user = getOneUser(userId);
+
         Map uploadResult =cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
         user.setProfileImageUrl(uploadResult.get("url").toString());
         userRepo.save(user);
@@ -74,6 +76,8 @@ public class UserService {
             return userRepo.findById(id).get();
         return null;
     }
+
+
     public User getOneUserByEmail(String email){
         return userRepo.findByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found!"));
     }
@@ -99,6 +103,14 @@ public class UserService {
         User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
                 ,"User not found!"));
         user.setPassword(password);
+        userRepo.save(user);
+        return user;
+    }
+
+    public User updateJobTitle(String userId, String jobTitle) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                ,"User not found!"));
+        user.setJobTitle(jobTitle);
         userRepo.save(user);
         return user;
     }
@@ -167,9 +179,6 @@ public class UserService {
         for (Task task : taskList) {
             if (task.getId().equals(taskId)) {
                 specificTask = task;
-                if(status == Status.completed){
-                    specificTask.setEndedAt(LocalDateTime.now());
-                }
                 specificTask.setStatus(status);
                 user.setUserTasks(taskList);
                 userRepo.save(user);

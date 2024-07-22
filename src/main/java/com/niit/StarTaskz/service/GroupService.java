@@ -29,13 +29,31 @@ public class GroupService {
     @Autowired
     CollaborationWorkspaceService workspaceService;
 
+
+
+    public String uploadGroupImage(String workspaceId,String groupId, MultipartFile file) throws IOException {
+        WorkSpace workSpace = workspaceService.getSingleWorkSpace(workspaceId);
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups) {
+            if (group.getId().equals(groupId)) {
+                Map uploadResult = cloudinaryConfig.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                group.setGroupImageUrl(uploadResult.get("url").toString());
+                workspaceRepo.save(workSpace);
+                return group.getGroupImageUrl();
+            }
+
+        }
+            return null;
+    }
+
+
     //  group creation
     public UserGroup createGroup(String workSpaceId,UserGroup group,String creatorId){
         WorkSpace userWorkspace = workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NO_CONTENT,"workspace not found!"));
         if(userWorkspace.getCreator().equals(creatorId)) {
             group.setId(UUID.randomUUID().toString());
             group.setWorkSpace(workSpaceId);
-            group.setMembers(new ArrayList<>(List.of(userWorkspace.getId())));
+            group.setMembers(new ArrayList<>(List.of(userWorkspace.getCreator())));
             group.setMessages(new ArrayList<Message>());
             group.setCreatedAt(LocalDateTime.now());
             userWorkspace.getGroups().add(group);
@@ -77,10 +95,31 @@ public class GroupService {
 
     public UserGroup updateGroupName(String workspaceId,String groupId,String groupName){
         WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
-        UserGroup group = getGroup(workspaceId,groupId);
-        group.setGroupName(groupName);
-        workspaceRepo.save(workSpace);
-        return group;
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups){
+            if (group.getId().equals(groupId)) {
+                group.setGroupName(groupName);
+                workspaceRepo.save(workSpace);
+                return group;
+
+            }
+        }
+        return null;
+
+    }
+    public UserGroup updateGroupDescription(String workspaceId,String groupId,String groupDescription){
+        WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
+        List<UserGroup> groups = workSpace.getGroups();
+        for(UserGroup group : groups){
+            if (group.getId().equals(groupId)) {
+                group.setGroupDescription(groupDescription);
+                workspaceRepo.save(workSpace);
+                return group;
+
+            }
+        }
+        return null;
+
     }
 
     public UserGroup addMembersToGroup(String workspaceId,String groupId,String memberId){
@@ -117,8 +156,7 @@ public class GroupService {
 
 
     public String sendMessage(String workspaceId,String groupId,String senderId, Message message){
-        System.out.println("Method reached");
-        WorkSpace workSpace = workspaceService.getSingleWorkSpace(workspaceId);
+        WorkSpace workSpace = workspaceRepo.findById(workspaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
         List<UserGroup> groups = workSpace.getGroups();
         for(UserGroup group : groups){
             if(group.getId().equals(groupId)){
@@ -130,10 +168,12 @@ public class GroupService {
                 groupMessages.add(message);
                 group.setMessages(groupMessages);
 
+                workspaceRepo.save(workSpace);
             }
+
         }
 
-        workspaceRepo.save(workSpace);
+
         return "message sent";
     }
 }

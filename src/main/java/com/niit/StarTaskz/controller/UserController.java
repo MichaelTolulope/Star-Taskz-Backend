@@ -1,5 +1,6 @@
 package com.niit.StarTaskz.controller;
 
+import com.niit.StarTaskz.model.dto_classes.collaboration_workspace.JobTitleDTO;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.dto_classes.user.*;
 import com.niit.StarTaskz.service.UserService;
@@ -90,6 +91,13 @@ public class UserController {
         return new ResponseEntity<>(userService.updatePassword(userId, password),HttpStatus.OK);
     }
 
+    // Endpoint to update jobTitle - Tested & Trusted
+    @PutMapping("/update-jobTitle/{userId}")
+    protected ResponseEntity<User> updateJobTitle(@PathVariable String userId, @RequestBody JobTitleDTO jobTitleDTO) {
+        String jobTitle = jobTitleDTO.getJobTitle();
+        return new ResponseEntity<>(userService.updateJobTitle(userId, jobTitle),HttpStatus.OK);
+    }
+
     // Endpoint to update date of birth - Tested & Trusted
     @PutMapping("/update-dateOfBirth/{userId}")
     protected ResponseEntity<User> updateDateOfBirth(@PathVariable String userId, @RequestBody UserDateOfBirthDTO dateOfBirthEntity) {
@@ -97,10 +105,8 @@ public class UserController {
         return new ResponseEntity<>(userService.updateDateOfBirth(userId, dateOfBirth),HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-user/{userId}")
-    protected ResponseEntity<String> deleteUser(@PathVariable String userId){
-        userService.deleteUser(userId);
-        return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
-    }
+
+    // get user by email
+
 
 }

@@ -1,7 +1,10 @@
 com\niit\StarTaskz\controller\UserGroupController.class
 com\niit\StarTaskz\StarTaskzApplication.class
 com\niit\StarTaskz\controller\WorkSpaceController.class
+com\niit\StarTaskz\model\user\AccountType.class
+com\niit\StarTaskz\configurations\CloudinaryConfig.class
 com\niit\StarTaskz\repository\UserRepo.class
+com\niit\StarTaskz\model\dto_classes\collaboration_workspace\JobTitleDTO.class
 com\niit\StarTaskz\model\task\TaskStepsSerializer.class
 com\niit\StarTaskz\model\task\Status.class
 com\niit\StarTaskz\model\dto_classes\collaboration_workspace\GroupNameDTO.class
@@ -12,6 +15,7 @@ com\niit\StarTaskz\model\dto_classes\user\LoginDTO.class
 com\niit\StarTaskz\model\task\Task.class
 com\niit\StarTaskz\controller\CollaboratingTaskController.class
 com\niit\StarTaskz\model\dto_classes\task\DateTimeDTO.class
+com\niit\StarTaskz\model\dto_classes\collaboration_workspace\WorkspaceDescription.class
 com\niit\StarTaskz\model\dto_classes\user\UserPasswordDTO.class
 com\niit\StarTaskz\model\user\User.class
 com\niit\StarTaskz\model\collaboration_workspace\WorkSpace.class
@@ -19,6 +23,7 @@ com\niit\StarTaskz\model\task\TaskSteps.class
 com\niit\StarTaskz\model\collaboration_workspace\groups\UserGroup.class
 com\niit\StarTaskz\service\CollaborationWorkspaceService.class
 com\niit\StarTaskz\model\collaboration_workspace\CollaboratingTask.class
+com\niit\StarTaskz\model\dto_classes\collaboration_workspace\GroupDescriptionDTO.class
 com\niit\StarTaskz\service\UserService.class
 com\niit\StarTaskz\model\user\User$UserBuilder.class
 com\niit\StarTaskz\model\dto_classes\StatusDTO.class
@@ -32,5 +37,6 @@ com\niit\StarTaskz\model\user\UserSerializer.class
 com\niit\StarTaskz\service\CollaboratingTaskService.class
 com\niit\StarTaskz\model\collaboration_workspace\groups\GroupSerializer.class
 com\niit\StarTaskz\configurations\SecurityConfig.class
+com\niit\StarTaskz\model\dto_classes\collaboration_workspace\WorkspaceTitle.class
 com\niit\StarTaskz\model\dto_classes\task\TaskNameDTO.class
 com\niit\StarTaskz\model\collaboration_workspace\ProgressStatus.class

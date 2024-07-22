@@ -1,3 +1,4 @@
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\configurations\CloudinaryConfig.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\configurations\SecurityConfig.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\controller\CollaboratingTaskController.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\controller\TaskController.java
@@ -11,7 +12,11 @@ C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\mode
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\collaboration_workspace\groups\UserGroup.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\collaboration_workspace\ProgressStatus.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\collaboration_workspace\WorkSpace.java
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\collaboration_workspace\GroupDescriptionDTO.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\collaboration_workspace\GroupNameDTO.java
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\collaboration_workspace\JobTitleDTO.java
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\collaboration_workspace\WorkspaceDescription.java
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\collaboration_workspace\WorkspaceTitle.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\StatusDTO.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\task\DateTimeDTO.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\dto_classes\task\TaskNameDTO.java
@@ -24,6 +29,7 @@ C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\mode
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\task\Task.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\task\TaskSteps.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\task\TaskStepsSerializer.java
+C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\user\AccountType.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\user\User.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\model\user\UserSerializer.java
 C:\Users\User\Documents\Star-Taskz-Backend\src\main\java\com\niit\StarTaskz\repository\CollaborationWorkspaceRepo.java
