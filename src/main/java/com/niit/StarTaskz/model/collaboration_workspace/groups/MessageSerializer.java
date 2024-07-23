@@ -13,14 +13,22 @@ public class MessageSerializer extends JsonSerializer<Message> {
 
         jsonGenerator.writeFieldName("id");
         jsonGenerator.writeObject(message.getId());
+
         jsonGenerator.writeFieldName("senderId");
-        jsonGenerator.writeStringField("senderImage",message.getSenderImage());
-        jsonGenerator.writeStringField("senderName",message.getSenderName());
         jsonGenerator.writeObject(message.getSenderId());
+
+        jsonGenerator.writeFieldName("senderImage");
+        jsonGenerator.writeStringField("senderImage", message.getSenderImage());
+
+        jsonGenerator.writeFieldName("senderName");
+        jsonGenerator.writeStringField("senderName", message.getSenderName());
+
         jsonGenerator.writeFieldName("messageContent");
         jsonGenerator.writeObject(message.getMessageContent());
+
         jsonGenerator.writeFieldName("readBy");
         jsonGenerator.writeObject(message.getReadBy());
+
         jsonGenerator.writeFieldName("dateTime");
         jsonGenerator.writeObject(message.getMessageDateTime());
 
