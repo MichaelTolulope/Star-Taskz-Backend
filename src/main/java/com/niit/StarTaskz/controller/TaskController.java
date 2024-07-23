@@ -2,6 +2,7 @@ package com.niit.StarTaskz.controller;
 
 import com.niit.StarTaskz.model.dto_classes.StatusDTO;
 import com.niit.StarTaskz.model.dto_classes.task.DateTimeDTO;
+import com.niit.StarTaskz.model.dto_classes.task.TaskCategoryDTO;
 import com.niit.StarTaskz.model.dto_classes.task.TaskNameDTO;
 import com.niit.StarTaskz.model.task.Status;
 import com.niit.StarTaskz.model.task.Task;
@@ -27,13 +28,13 @@ public class TaskController {
     // endpoint to get all tasks for user - Tested & Trusted
     @GetMapping("/all/{userId}")
     protected ResponseEntity<List<Task>> getAllTasks(@PathVariable String userId){
-        return new ResponseEntity<>(userService.getAllTasks(userId), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.getAllTasks(userId), HttpStatus.OK);
     }
 
     // endpoint to get single task - Tested and Trusted
     @GetMapping("/single-task/{userId}/{taskId}")
     protected ResponseEntity<Task> getSingleTask(@PathVariable String userId,@PathVariable String taskId){
-        return new ResponseEntity<>(userService.getSingleTask(userId,taskId), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.getSingleTask(userId,taskId), HttpStatus.OK);
     }
 
     // endpoint to created task - Tested and Trusted
@@ -43,7 +44,7 @@ public class TaskController {
         task.setId(UUID.randomUUID().toString());
         task.setSteps(new ArrayList<>());
         task.setStatus(Status.pending);
-        return new ResponseEntity<>(userService.addTask(userId,task),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.addTask(userId,task),HttpStatus.OK);
     }
 
     // endpoint to update task - Tested & Trusted
@@ -73,7 +74,7 @@ public class TaskController {
     protected ResponseEntity<Task> addSubTask(@PathVariable String userId, @PathVariable String taskId, @RequestBody TaskSteps subTask){
         subTask.setId(UUID.randomUUID().toString());
         subTask.setStatus(Status.pending);
-        return new ResponseEntity<>(userService.addSubTasks(userId,taskId,subTask),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.addSubTasks(userId,taskId,subTask),HttpStatus.OK);
     }
 
     // endpoint to update subTask status - Tested &  Trusted
@@ -88,6 +89,11 @@ public class TaskController {
     protected ResponseEntity<Task> updateTaskName(@PathVariable String userId, @PathVariable String taskId, @RequestBody TaskNameDTO taskNameEntity){
         String taskName = taskNameEntity.getTaskName();
         return new ResponseEntity<>(userService.updateTaskName(userId,taskId,taskName), HttpStatus.OK);
+    }
+    @PutMapping("/update-taskCategory/{userId}/{taskId}")
+    protected ResponseEntity<Task> updateTaskCategory(@PathVariable String userId, @PathVariable String taskId, @RequestBody TaskCategoryDTO taskCategoryEntity){
+        String taskName = taskCategoryEntity.getTaskCategory();
+        return new ResponseEntity<>(userService.updateTaskCategory(userId,taskId,taskName), HttpStatus.OK);
     }
 
  // endpoint to delete a subTask - Tested & Trusted

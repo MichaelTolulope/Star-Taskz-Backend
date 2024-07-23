@@ -19,7 +19,7 @@ public class CollaboratingTaskController {
 
     @PostMapping("/create-task{workspaceId}/{creatorId}")
     protected ResponseEntity<List<CollaboratingTask>> ceateCollabTask(@PathVariable String workspaceId,@PathVariable String creatorId,@RequestBody CollaboratingTask task){
-       return new ResponseEntity<>(taskService.createTask(workspaceId,creatorId, task), HttpStatus.CREATED);
+       return new ResponseEntity<>(taskService.createTask(workspaceId,creatorId, task), HttpStatus.OK);
     }
 
 }

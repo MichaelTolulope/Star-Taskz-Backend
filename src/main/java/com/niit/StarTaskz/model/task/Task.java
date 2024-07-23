@@ -12,6 +12,7 @@ public class Task {
     private String id;
     private String taskName;
     private String taskType;
+    private TaskCategory taskCategory;
     private List<TaskSteps> steps;
     private LocalDateTime createdAt;
     private LocalDateTime startedAt;

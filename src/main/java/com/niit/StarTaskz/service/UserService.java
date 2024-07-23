@@ -2,6 +2,7 @@ package com.niit.StarTaskz.service;
 
 import com.cloudinary.utils.ObjectUtils;
 import com.niit.StarTaskz.configurations.CloudinaryConfig;
+import com.niit.StarTaskz.model.task.TaskCategory;
 import com.niit.StarTaskz.model.user.User;
 import com.niit.StarTaskz.model.task.Status;
 import com.niit.StarTaskz.model.task.Task;
@@ -159,6 +160,21 @@ public class UserService {
             if (task.getId().equals(taskId)) {
                 specificTask = task;
                 specificTask.setTaskName(taskName);
+                user.setUserTasks(taskList);
+                userRepo.save(user);
+                return specificTask;
+            }
+        }
+        return null;
+    }
+    public Task updateTaskCategory(String userId, String taskId, String taskCategory) {
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found!"));
+        List<Task> taskList = user.getUserTasks();
+        Task specificTask;
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
+                specificTask = task;
+                specificTask.setTaskCategory(TaskCategory.valueOf(taskCategory));
                 user.setUserTasks(taskList);
                 userRepo.save(user);
                 return specificTask;

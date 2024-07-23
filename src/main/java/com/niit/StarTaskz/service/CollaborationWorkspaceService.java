@@ -66,7 +66,7 @@ public class CollaborationWorkspaceService {
 
 
     public WorkSpace getSingleWorkSpace(String workSpaceId){
-        return workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"group not found!"));
+        return workspaceRepo.findById(workSpaceId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"workspace not found!"));
 
     }
     public String deleteWorkSpace( String workSpace){

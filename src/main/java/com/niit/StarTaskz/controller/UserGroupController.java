@@ -23,14 +23,14 @@ public class UserGroupController {
     // endpoint to get single group created by user
     @GetMapping("/get-group/{workspaceId}/{groupId}")
     public ResponseEntity<UserGroup> getSingleGroup(@PathVariable String workspaceId, @PathVariable String groupId){
-        return new ResponseEntity<>(groupService.getGroup(workspaceId,groupId),HttpStatus.FOUND);
+        return new ResponseEntity<>(groupService.getGroup(workspaceId,groupId),HttpStatus.OK);
     }
 
     // endpoint to create a group -
     @PostMapping("/create-group/{workSpaceId}/{creatorId}")
     protected ResponseEntity<UserGroup> createGroup(@PathVariable String workSpaceId, @RequestBody UserGroup group, @PathVariable String creatorId){
 
-        return new ResponseEntity<>(groupService.createGroup(workSpaceId,group,creatorId),HttpStatus.CREATED);
+        return new ResponseEntity<>(groupService.createGroup(workSpaceId,group,creatorId),HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/" +

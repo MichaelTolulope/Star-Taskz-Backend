@@ -23,17 +23,17 @@ public class WorkSpaceController {
 
     @GetMapping("/all/{userId}")
     protected ResponseEntity<List<WorkSpace>> getAllWorkspace(@PathVariable String userId){
-       return new ResponseEntity<>( workspaceService.getAllWorkSpace(userId), HttpStatus.FOUND);
+       return new ResponseEntity<>( workspaceService.getAllWorkSpace(userId), HttpStatus.OK);
     }
 
     @GetMapping("/single-workspace/{workSpaceId}")
     public ResponseEntity<WorkSpace> getOnWorkSpace(@PathVariable String workSpaceId){
-        return new ResponseEntity<>(workspaceService.getSingleWorkSpace(workSpaceId),HttpStatus.FOUND);
+        return new ResponseEntity<>(workspaceService.getSingleWorkSpace(workSpaceId),HttpStatus.OK);
     }
 
     @PostMapping("/create-workSpace/{userId}")
     public ResponseEntity<WorkSpace> createWorkSpace(@PathVariable String userId, @RequestBody WorkSpace workSpace){
-        return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.CREATED);
+        return  new ResponseEntity<>(workspaceService.createWorkspace(workSpace,userId),HttpStatus.OK);
     }
 
     @PutMapping("/update-Title/{workSpaceId}")
