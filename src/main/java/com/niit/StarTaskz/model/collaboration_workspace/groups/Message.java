@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@JsonSerialize(using = MessageSerializer.class)
+//@JsonSerialize(using = MessageSerializer.class)
 @Data
 public class Message {
     private String id;
